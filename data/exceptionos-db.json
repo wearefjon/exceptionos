@@ -70,17 +70,21 @@
       "type": "Machine",
       "siteId": "site-plant-a",
       "siteName": "Plant A",
-      "status": "Warning",
+      "status": "Online",
       "description": "Primary CNC precision cutting cell",
       "telemetry": {
-        "temperature": 94,
-        "vibration": 0.38,
+        "temperature": 71,
+        "vibration": 0.12,
         "pressure": 4.8,
         "runtimeHours": 8241
       },
       "lastService": "Aug 21",
       "nextService": "Nov 21",
       "maintenanceHistory": [
+        {
+          "date": "Today",
+          "event": "Resolved INC-10482: Drive bearing replaced and verified."
+        },
         {
           "date": "Aug 21",
           "event": "Drive bearing replaced",
@@ -234,7 +238,7 @@
       "name": "Bearing B-204",
       "category": "Drive Bearings",
       "description": "Heavy-duty ceramic hybrid drive bearing",
-      "quantity": 4,
+      "quantity": 3,
       "warehouse": "Warehouse B",
       "locationBin": "B3-1",
       "unitCost": 420,
@@ -347,7 +351,7 @@
       "title": "Machine 7 overheating and abnormal vibration",
       "description": "Worker reported Machine 7 is overheating and vibrating significantly more than usual during high-speed cutting cycles.",
       "severity": "Critical",
-      "status": "AWAITING_AUTHORIZATION",
+      "status": "RESOLVED",
       "currentCondition": {
         "temperature": 94,
         "vibration": 0.38,
@@ -375,7 +379,15 @@
       },
       "authorizationId": "auth-10482",
       "createdAt": "10:42",
-      "updatedAt": "10:46"
+      "updatedAt": "12:49",
+      "workOrderId": "WO-2037",
+      "postRepairCondition": {
+        "temperature": 71,
+        "vibration": 0.12,
+        "verifiedAt": "12:49",
+        "verifiedStatus": "Verified"
+      },
+      "resolvedAt": "12:49"
     },
     {
       "id": "INC-10479",
@@ -520,6 +532,42 @@
   ],
   "incidentEvents": [
     {
+      "id": "evt-1790768973226-verif",
+      "incidentId": "INC-10482",
+      "timestamp": "12:49",
+      "title": "Telemetry verified",
+      "description": "Independent telemetry test: Temperature 71°C (Normal), Vibration 0.12g (Normal). Passed operating criteria.",
+      "category": "verification",
+      "actor": "Verification Agent"
+    },
+    {
+      "id": "evt-1790768973226-res",
+      "incidentId": "INC-10482",
+      "timestamp": "12:49",
+      "title": "Incident closed & resolved",
+      "description": "All criteria satisfied. Operational loop successfully closed.",
+      "category": "resolution",
+      "actor": "ExceptionOS Core"
+    },
+    {
+      "id": "evt-1790768736433-appr",
+      "incidentId": "INC-10482",
+      "timestamp": "12:45",
+      "title": "Authorization approved",
+      "description": "Sarah Williams (Supervisor) approved: Dispatch Bearing B-204 from Warehouse B to Plant A. Dispatch initiated.",
+      "category": "authorization",
+      "actor": "Sarah Williams (Supervisor)"
+    },
+    {
+      "id": "evt-1790768736433-wo",
+      "incidentId": "INC-10482",
+      "timestamp": "12:45",
+      "title": "Work order created",
+      "description": "Work order WO-2037 issued to James Okoro.",
+      "category": "work_order",
+      "actor": "ExceptionOS Orchestration"
+    },
+    {
       "id": "evt-1",
       "incidentId": "INC-10482",
       "timestamp": "10:42",
@@ -597,7 +645,9 @@
       "estimatedCost": 420,
       "requestedBy": "ExceptionOS Autonomous Dispatcher",
       "requestedAt": "10:46",
-      "status": "PENDING"
+      "status": "APPROVED",
+      "decidedBy": "Sarah Williams (Supervisor)",
+      "decidedAt": "12:45"
     },
     {
       "id": "auth-10461",
@@ -619,6 +669,31 @@
   ],
   "workOrders": [
     {
+      "id": "WO-2037",
+      "organizationId": "org-acme",
+      "incidentId": "INC-10482",
+      "assetId": "ast-m007",
+      "assetCode": "M-007",
+      "assetName": "Machine 7",
+      "siteName": "Plant A",
+      "title": "Execute recovery: Dispatch Bearing B-204 from Warehouse B to Plant A",
+      "description": "Install replacement parts dispatched under auth-10482. Verify operating temperature and vibration return to baseline.",
+      "assignedToUserId": "usr-james",
+      "assignedToName": "James Okoro",
+      "status": "In Progress",
+      "priority": "Critical",
+      "requiredParts": [
+        {
+          "partCode": "B-204",
+          "name": "Dispatch 1 × Bearing B-204 from Warehouse B to Plant A",
+          "quantity": 1,
+          "status": "Dispatched"
+        }
+      ],
+      "createdAt": "12:45",
+      "startedAt": "12:45"
+    },
+    {
       "id": "WO-2031",
       "organizationId": "org-acme",
       "incidentId": "INC-10482",
@@ -629,7 +704,7 @@
       "title": "Replace drive bearing and calibrate spindle runout",
       "description": "Install replacement ceramic hybrid bearing B-204 upon arrival from Warehouse B. Check vibration levels.",
       "assignedToUserId": "usr-james",
-      "assignedToName": "Alex Rivera",
+      "assignedToName": "James Okoro",
       "status": "In Progress",
       "priority": "Critical",
       "requiredParts": [
@@ -730,8 +805,28 @@
   ],
   "auditLogs": [
     {
+      "id": "aud-1790768973227",
+      "timestamp": "2026-09-30T11:49:33.227Z",
+      "timeFormatted": "12:49",
+      "title": "Incident resolved",
+      "description": "Incident INC-10482 independently verified and resolved. Asset returned to Online status.",
+      "category": "Incidents",
+      "actor": "Verification Agent",
+      "targetId": "INC-10482"
+    },
+    {
+      "id": "aud-1790768736433",
+      "timestamp": "2026-09-30T11:45:36.433Z",
+      "timeFormatted": "12:45",
+      "title": "Authorization approved",
+      "description": "Sarah Williams (Supervisor) approved authorization auth-10482 for INC-10482",
+      "category": "Authorizations",
+      "actor": "Sarah Williams (Supervisor)",
+      "targetId": "auth-10482"
+    },
+    {
       "id": "aud-1",
-      "timestamp": "2026-09-30T10:29:22.500Z",
+      "timestamp": "2026-09-30T11:23:56.007Z",
       "timeFormatted": "10:46",
       "title": "Authorization requested",
       "description": "ExceptionOS AI created authorization request auth-10482 for dispatch of Bearing B-204 ($420).",
@@ -741,7 +836,7 @@
     },
     {
       "id": "aud-2",
-      "timestamp": "2026-09-30T10:28:22.503Z",
+      "timestamp": "2026-09-30T11:22:56.007Z",
       "timeFormatted": "10:45",
       "title": "Part alternative found",
       "description": "Bearing B-204 located at Warehouse B (4 available). Cross-warehouse dispatch plan formulated.",
@@ -751,7 +846,7 @@
     },
     {
       "id": "aud-3",
-      "timestamp": "2026-09-30T10:27:22.503Z",
+      "timestamp": "2026-09-30T11:21:56.007Z",
       "timeFormatted": "10:44",
       "title": "Inventory checked",
       "description": "Queried Plant A store for Bearing B-204. Balance: 0 units.",
@@ -761,7 +856,7 @@
     },
     {
       "id": "aud-4",
-      "timestamp": "2026-09-30T10:26:22.503Z",
+      "timestamp": "2026-09-30T11:20:56.007Z",
       "timeFormatted": "10:43",
       "title": "Maintenance history queried",
       "description": "Machine 7 service records analyzed. 2,100 operating hours since last bearing replacement.",
@@ -771,7 +866,7 @@
     },
     {
       "id": "aud-5",
-      "timestamp": "2026-09-30T10:25:22.503Z",
+      "timestamp": "2026-09-30T11:19:56.007Z",
       "timeFormatted": "10:43",
       "title": "Telemetry checked",
       "description": "Temperature 94°C (Limit: 75°C), Vibration 0.38g (Limit: 0.15g). Severity elevated to Critical.",
@@ -781,7 +876,7 @@
     },
     {
       "id": "aud-6",
-      "timestamp": "2026-09-30T10:24:22.503Z",
+      "timestamp": "2026-09-30T11:18:56.007Z",
       "timeFormatted": "10:42",
       "title": "Incident created",
       "description": "Field voice report by James Okoro processed. Asset M-007 identified automatically.",
