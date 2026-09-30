@@ -28,6 +28,8 @@ function ExceptionOSApp() {
   const [currentTab, setCurrentTab] = useState('overview');
   const [selectedIncidentId, setSelectedIncidentId] = useState<string | null>(null);
 
+  const [viewMode, setViewMode] = useState<'app' | 'landing' | 'auth'>('landing');
+
   // Drawers & Modals
   const [isVoiceOpen, setIsVoiceOpen] = useState(false);
   const [isNewIncidentOpen, setIsNewIncidentOpen] = useState(false);
@@ -95,16 +97,17 @@ function ExceptionOSApp() {
     refreshData();
     setSelectedIncidentId(incidentId);
     setCurrentTab('incidents');
+    setViewMode('app');
   };
 
-  // If user is not authenticated and hasn't clicked sign in, show public landing page
-  if (!isAuthenticated && !showAuthScreen) {
+  // If user selected Landing Page mode
+  if (viewMode === 'landing') {
     return (
       <>
         <LandingPage
-          onEnterApp={() => setShowAuthScreen(true)}
+          onEnterApp={() => setViewMode('app')}
           onOpenVoiceDemo={() => setIsVoiceOpen(true)}
-          onGoToAuth={() => setShowAuthScreen(true)}
+          onGoToAuth={() => setViewMode('auth')}
         />
         <VoiceDrawer
           isOpen={isVoiceOpen}
@@ -115,17 +118,17 @@ function ExceptionOSApp() {
     );
   }
 
-  // If user chose to sign in
-  if (!isAuthenticated && showAuthScreen) {
+  // If user selected Auth mode or is not authenticated
+  if (viewMode === 'auth' || !isAuthenticated) {
     return (
       <AuthPage
-        onBackToLanding={() => setShowAuthScreen(false)}
-        onSuccess={() => setShowAuthScreen(false)}
+        onBackToLanding={() => setViewMode('landing')}
+        onSuccess={() => setViewMode('app')}
       />
     );
   }
 
-  // Authenticated Application
+  // Authenticated Application (viewMode === 'app')
   const pendingAuthCount = authorizations.filter((a) => a.status === 'PENDING').length;
   const criticalIncidentCount = incidents.filter(
     (i) => i.severity === 'Critical' && i.status !== 'RESOLVED'
@@ -143,6 +146,7 @@ function ExceptionOSApp() {
         setCurrentTab(tab);
       }}
       onOpenVoice={() => setIsVoiceOpen(true)}
+      onViewLanding={() => setViewMode('landing')}
       pendingAuthCount={pendingAuthCount}
       criticalIncidentCount={criticalIncidentCount}
     >

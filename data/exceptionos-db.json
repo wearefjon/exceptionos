@@ -1,0 +1,793 @@
+{
+  "organization": {
+    "id": "org-acme",
+    "name": "Acme Manufacturing",
+    "industry": "Industrial Manufacturing",
+    "defaultSiteId": "site-plant-a",
+    "timezone": "Africa/Lagos"
+  },
+  "users": [
+    {
+      "id": "usr-alex",
+      "organizationId": "org-acme",
+      "name": "Alex Johnson",
+      "email": "alex@acme.com",
+      "role": "Admin",
+      "siteId": "site-plant-a",
+      "status": "Active"
+    },
+    {
+      "id": "usr-sarah",
+      "organizationId": "org-acme",
+      "name": "Sarah Williams",
+      "email": "sarah@acme.com",
+      "role": "Supervisor",
+      "siteId": "site-plant-b",
+      "status": "Active"
+    },
+    {
+      "id": "usr-james",
+      "organizationId": "org-acme",
+      "name": "James Okoro",
+      "email": "james@acme.com",
+      "role": "Technician",
+      "siteId": "site-plant-a",
+      "status": "Active"
+    },
+    {
+      "id": "usr-taylor",
+      "organizationId": "org-acme",
+      "name": "Taylor K.",
+      "email": "taylor@acme.com",
+      "role": "Operator",
+      "siteId": "site-plant-a",
+      "status": "Active"
+    }
+  ],
+  "sites": [
+    {
+      "id": "site-plant-a",
+      "organizationId": "org-acme",
+      "name": "Plant A",
+      "location": "Lagos, Nigeria",
+      "assetCount": 127,
+      "activeIncidentCount": 8
+    },
+    {
+      "id": "site-plant-b",
+      "organizationId": "org-acme",
+      "name": "Plant B",
+      "location": "Abuja, Nigeria",
+      "assetCount": 83,
+      "activeIncidentCount": 3
+    }
+  ],
+  "assets": [
+    {
+      "id": "ast-m007",
+      "assetCode": "M-007",
+      "name": "Machine 7",
+      "type": "Machine",
+      "siteId": "site-plant-a",
+      "siteName": "Plant A",
+      "status": "Warning",
+      "description": "Primary CNC precision cutting cell",
+      "telemetry": {
+        "temperature": 94,
+        "vibration": 0.38,
+        "pressure": 4.8,
+        "runtimeHours": 8241
+      },
+      "lastService": "Aug 21",
+      "nextService": "Nov 21",
+      "maintenanceHistory": [
+        {
+          "date": "Aug 21",
+          "event": "Drive bearing replaced",
+          "hoursAgo": 2100
+        },
+        {
+          "date": "Jun 04",
+          "event": "Routine calibration & inspection"
+        },
+        {
+          "date": "Mar 18",
+          "event": "Spindle vibration warning"
+        }
+      ]
+    },
+    {
+      "id": "ast-m012",
+      "assetCode": "M-012",
+      "name": "Machine 12",
+      "type": "Machine",
+      "siteId": "site-plant-a",
+      "siteName": "Plant A",
+      "status": "Online",
+      "description": "Secondary CNC milling station",
+      "telemetry": {
+        "temperature": 68,
+        "vibration": 0.09,
+        "pressure": 5.1,
+        "runtimeHours": 5410
+      },
+      "lastService": "Jul 15",
+      "nextService": "Oct 15",
+      "maintenanceHistory": [
+        {
+          "date": "Jul 15",
+          "event": "Coolant flush & filter replacement"
+        },
+        {
+          "date": "Apr 02",
+          "event": "Axis motor recalibration"
+        }
+      ]
+    },
+    {
+      "id": "ast-c003",
+      "assetCode": "C-003",
+      "name": "Conveyor 3",
+      "type": "Conveyor",
+      "siteId": "site-plant-a",
+      "siteName": "Plant A",
+      "status": "Online",
+      "description": "Main assembly transfer conveyor",
+      "telemetry": {
+        "temperature": 55,
+        "vibration": 0.22,
+        "runtimeHours": 11450
+      },
+      "lastService": "Sep 01",
+      "nextService": "Dec 01",
+      "maintenanceHistory": [
+        {
+          "date": "Sep 01",
+          "event": "Belt tension inspection"
+        },
+        {
+          "date": "May 10",
+          "event": "Roller bearing lubrication"
+        }
+      ]
+    },
+    {
+      "id": "ast-p002",
+      "assetCode": "P-002",
+      "name": "Hydraulic Press 2",
+      "type": "Press",
+      "siteId": "site-plant-b",
+      "siteName": "Plant B",
+      "status": "Maintenance",
+      "description": "50-ton hydraulic stamping press",
+      "telemetry": {
+        "temperature": 62,
+        "vibration": 0.14,
+        "pressure": 3.2,
+        "runtimeHours": 9120
+      },
+      "lastService": "Aug 10",
+      "nextService": "Oct 30",
+      "maintenanceHistory": [
+        {
+          "date": "Aug 10",
+          "event": "Pressure relief valve seal replacement"
+        },
+        {
+          "date": "Feb 14",
+          "event": "Annual hydraulic fluid overhaul"
+        }
+      ]
+    },
+    {
+      "id": "ast-cp001",
+      "assetCode": "CP-001",
+      "name": "Compressor 1",
+      "type": "Compressor",
+      "siteId": "site-plant-b",
+      "siteName": "Plant B",
+      "status": "Online",
+      "description": "Rotary screw industrial air compressor",
+      "telemetry": {
+        "temperature": 78,
+        "vibration": 0.11,
+        "pressure": 7.4,
+        "runtimeHours": 14200
+      },
+      "lastService": "Sep 12",
+      "nextService": "Dec 12",
+      "maintenanceHistory": [
+        {
+          "date": "Sep 12",
+          "event": "Air intake filter replacement"
+        }
+      ]
+    },
+    {
+      "id": "ast-mo004",
+      "assetCode": "MO-004",
+      "name": "Motor 4",
+      "type": "Motor",
+      "siteId": "site-plant-a",
+      "siteName": "Plant A",
+      "status": "Online",
+      "description": "Induction drive motor for exhaust system",
+      "telemetry": {
+        "temperature": 64,
+        "vibration": 0.1,
+        "runtimeHours": 7300
+      },
+      "lastService": "Jun 22",
+      "nextService": "Sep 22",
+      "maintenanceHistory": [
+        {
+          "date": "Jun 22",
+          "event": "Stator winding insulation test"
+        }
+      ]
+    }
+  ],
+  "inventory": [
+    {
+      "id": "inv-b204-pb",
+      "partCode": "B-204",
+      "name": "Bearing B-204",
+      "category": "Drive Bearings",
+      "description": "Heavy-duty ceramic hybrid drive bearing",
+      "quantity": 4,
+      "warehouse": "Warehouse B",
+      "locationBin": "B3-1",
+      "unitCost": 420,
+      "compatibleAssetCodes": [
+        "M-007",
+        "M-012",
+        "MO-004"
+      ]
+    },
+    {
+      "id": "inv-b204-pa",
+      "partCode": "B-204",
+      "name": "Bearing B-204",
+      "category": "Drive Bearings",
+      "description": "Heavy-duty ceramic hybrid drive bearing",
+      "quantity": 0,
+      "warehouse": "Plant A",
+      "locationBin": "A1-2",
+      "unitCost": 420,
+      "compatibleAssetCodes": [
+        "M-007",
+        "M-012",
+        "MO-004"
+      ]
+    },
+    {
+      "id": "inv-b304",
+      "partCode": "B-304",
+      "name": "Bearing B-304",
+      "category": "Bearings",
+      "description": "Standard roller bearing",
+      "quantity": 0,
+      "warehouse": "Plant A",
+      "locationBin": "A1-4",
+      "unitCost": 310,
+      "compatibleAssetCodes": [
+        "C-003"
+      ]
+    },
+    {
+      "id": "inv-v118",
+      "partCode": "V-118",
+      "name": "V-Belt V-118",
+      "category": "Belts & Drives",
+      "description": "Reinforced industrial synchronous drive belt",
+      "quantity": 12,
+      "warehouse": "Plant A",
+      "locationBin": "A2-3",
+      "unitCost": 85,
+      "compatibleAssetCodes": [
+        "C-003",
+        "CP-001"
+      ]
+    },
+    {
+      "id": "inv-hf233",
+      "partCode": "HF-233",
+      "name": "Hydraulic Filter HF-233",
+      "category": "Filtration",
+      "description": "High-pressure micro-glass hydraulic filter element",
+      "quantity": 6,
+      "warehouse": "Plant B",
+      "locationBin": "B1-4",
+      "unitCost": 140,
+      "compatibleAssetCodes": [
+        "P-002"
+      ]
+    },
+    {
+      "id": "inv-mc440",
+      "partCode": "MC-440",
+      "name": "Motor Contactor MC-440",
+      "category": "Electrical",
+      "description": "3-Pole 40A AC-3 heavy industrial contactor",
+      "quantity": 8,
+      "warehouse": "Plant A",
+      "locationBin": "A3-2",
+      "unitCost": 195,
+      "compatibleAssetCodes": [
+        "MO-004",
+        "CP-001"
+      ]
+    },
+    {
+      "id": "inv-ps772",
+      "partCode": "PS-772",
+      "name": "Pressure Sensor PS-772",
+      "category": "Instrumentation",
+      "description": "4-20mA 0-16 bar piezoresistive pressure transmitter",
+      "quantity": 3,
+      "warehouse": "Warehouse B",
+      "locationBin": "B4-2",
+      "unitCost": 280,
+      "compatibleAssetCodes": [
+        "P-002",
+        "CP-001"
+      ]
+    }
+  ],
+  "incidents": [
+    {
+      "id": "INC-10482",
+      "organizationId": "org-acme",
+      "siteId": "site-plant-a",
+      "siteName": "Plant A",
+      "assetId": "ast-m007",
+      "assetCode": "M-007",
+      "assetName": "Machine 7",
+      "reporterName": "James",
+      "title": "Machine 7 overheating and abnormal vibration",
+      "description": "Worker reported Machine 7 is overheating and vibrating significantly more than usual during high-speed cutting cycles.",
+      "severity": "Critical",
+      "status": "AWAITING_AUTHORIZATION",
+      "currentCondition": {
+        "temperature": 94,
+        "vibration": 0.38,
+        "tempStatus": "Critical",
+        "vibStatus": "Critical"
+      },
+      "investigationNotes": [
+        "Telemetry indicates abnormal temperature (94°C) and vibration (0.38g). Both values are outside standard operating thresholds (T < 75°C, V < 0.15g).",
+        "Recent maintenance history shows drive bearing was last replaced 2,100 operating hours ago.",
+        "Relevant SOP (SOP-M007-BRG) recommends immediate drive bearing inspection and replacement to avoid catastrophic spindle seizure.",
+        "Plant A local inventory has 0 units of Bearing B-204 in stock.",
+        "Warehouse B has 4 compatible units in stock (14 km distance, estimated dispatch time 45 mins)."
+      ],
+      "proposedAction": {
+        "actionType": "dispatch",
+        "title": "Dispatch 1 × Bearing B-204 from Warehouse B to Plant A",
+        "description": "Dispatch replacement drive bearing B-204 from Warehouse B to Plant A and assign technician James Okoro.",
+        "partCode": "B-204",
+        "quantity": 1,
+        "sourceWarehouse": "Warehouse B",
+        "destinationSite": "Plant A",
+        "distanceKm": 14,
+        "estimatedCost": 420,
+        "requiresAuthorization": true
+      },
+      "authorizationId": "auth-10482",
+      "createdAt": "10:42",
+      "updatedAt": "10:46"
+    },
+    {
+      "id": "INC-10479",
+      "organizationId": "org-acme",
+      "siteId": "site-plant-a",
+      "siteName": "Plant A",
+      "assetId": "ast-c003",
+      "assetCode": "C-003",
+      "assetName": "Conveyor 3",
+      "reporterName": "Taylor K.",
+      "title": "Conveyor 3 high vibration and belt slip",
+      "description": "Conveyor transfer belt showing recurring vibration and slip during load spikes.",
+      "severity": "High",
+      "status": "IN_PROGRESS",
+      "currentCondition": {
+        "temperature": 55,
+        "vibration": 0.22,
+        "tempStatus": "Normal",
+        "vibStatus": "Above normal"
+      },
+      "investigationNotes": [
+        "Belt tension check indicated 18% slack.",
+        "Technician Sam T. assigned with replacement V-Belt V-118."
+      ],
+      "workOrderId": "WO-2030",
+      "createdAt": "09:15",
+      "updatedAt": "18m ago"
+    },
+    {
+      "id": "INC-10471",
+      "organizationId": "org-acme",
+      "siteId": "site-plant-b",
+      "siteName": "Plant B",
+      "assetId": "ast-p002",
+      "assetCode": "P-002",
+      "assetName": "Hydraulic Press 2",
+      "reporterName": "Sarah W.",
+      "title": "Hydraulic pressure drop on stamping cycle",
+      "description": "Operating pressure dipped below 3.5 bar during active cycle.",
+      "severity": "Medium",
+      "status": "RESOLVED",
+      "currentCondition": {
+        "temperature": 62,
+        "vibration": 0.14,
+        "tempStatus": "Normal",
+        "vibStatus": "Normal"
+      },
+      "postRepairCondition": {
+        "temperature": 61,
+        "vibration": 0.12,
+        "verifiedAt": "09:45",
+        "verifiedStatus": "Verified"
+      },
+      "investigationNotes": [
+        "Hydraulic filter HF-233 was replaced.",
+        "Post-repair pressure restored to 5.0 bar, temperature stable at 61°C."
+      ],
+      "createdAt": "08:30",
+      "updatedAt": "42m ago",
+      "resolvedAt": "09:48"
+    },
+    {
+      "id": "INC-10468",
+      "organizationId": "org-acme",
+      "siteId": "site-plant-a",
+      "siteName": "Plant A",
+      "assetId": "ast-mo004",
+      "assetCode": "MO-004",
+      "assetName": "Motor 4",
+      "reporterName": "Riley S.",
+      "title": "Motor 4 contactor chatter and thermal trip",
+      "description": "Thermal overload relay tripped twice during morning startup.",
+      "severity": "High",
+      "status": "INVESTIGATING",
+      "currentCondition": {
+        "temperature": 64,
+        "vibration": 0.1,
+        "tempStatus": "Normal",
+        "vibStatus": "Normal"
+      },
+      "investigationNotes": [
+        "Checking auxiliary contacts and line voltage balance."
+      ],
+      "createdAt": "07:50",
+      "updatedAt": "1h ago"
+    },
+    {
+      "id": "INC-10465",
+      "organizationId": "org-acme",
+      "siteId": "site-plant-b",
+      "siteName": "Plant B",
+      "assetId": "ast-cp001",
+      "assetCode": "CP-001",
+      "assetName": "Compressor 1",
+      "reporterName": "Jordan L.",
+      "title": "Air compressor pressure relief leakage",
+      "description": "Audible air venting from secondary valve assembly.",
+      "severity": "Medium",
+      "status": "OPEN",
+      "currentCondition": {
+        "temperature": 78,
+        "vibration": 0.11,
+        "tempStatus": "Above normal",
+        "vibStatus": "Normal"
+      },
+      "investigationNotes": [],
+      "createdAt": "06:30",
+      "updatedAt": "2h ago"
+    },
+    {
+      "id": "INC-10462",
+      "organizationId": "org-acme",
+      "siteId": "site-plant-a",
+      "siteName": "Plant A",
+      "assetId": "ast-m012",
+      "assetCode": "M-012",
+      "assetName": "Machine 12",
+      "reporterName": "Alex R.",
+      "title": "Coolant flow reduction warning",
+      "description": "Coolant intake nozzle partially obstructed.",
+      "severity": "Low",
+      "status": "RESOLVED",
+      "currentCondition": {
+        "temperature": 68,
+        "vibration": 0.09,
+        "tempStatus": "Normal",
+        "vibStatus": "Normal"
+      },
+      "postRepairCondition": {
+        "temperature": 67,
+        "vibration": 0.08,
+        "verifiedAt": "07:15",
+        "verifiedStatus": "Verified"
+      },
+      "investigationNotes": [
+        "Cleared chip debris from nozzle orifice."
+      ],
+      "createdAt": "06:00",
+      "updatedAt": "3h ago",
+      "resolvedAt": "07:18"
+    }
+  ],
+  "incidentEvents": [
+    {
+      "id": "evt-1",
+      "incidentId": "INC-10482",
+      "timestamp": "10:42",
+      "title": "Incident created",
+      "description": "Reported by voice: \"Machine 7 is overheating and vibrating more than usual.\"",
+      "category": "creation",
+      "actor": "James Okoro"
+    },
+    {
+      "id": "evt-2",
+      "incidentId": "INC-10482",
+      "timestamp": "10:43",
+      "title": "Telemetry checked",
+      "description": "Temperature: 94°C (Normal < 75°C) · Vibration: 0.38g (Normal < 0.15g). Critical anomaly confirmed.",
+      "category": "telemetry",
+      "actor": "ExceptionOS AI Agent"
+    },
+    {
+      "id": "evt-3",
+      "incidentId": "INC-10482",
+      "timestamp": "10:43",
+      "title": "Maintenance history queried",
+      "description": "Drive bearing serviced 2,100 operating hours ago. Component reached end of recommended lifecycle.",
+      "category": "history",
+      "actor": "ExceptionOS AI Agent"
+    },
+    {
+      "id": "evt-4",
+      "incidentId": "INC-10482",
+      "timestamp": "10:44",
+      "title": "SOP retrieved",
+      "description": "SOP-M007-BRG: Mandatory spindle drive bearing replacement prior to further high-load operations.",
+      "category": "sop",
+      "actor": "ExceptionOS AI Agent"
+    },
+    {
+      "id": "evt-5",
+      "incidentId": "INC-10482",
+      "timestamp": "10:44",
+      "title": "Inventory checked",
+      "description": "Plant A local stock for Bearing B-204 is 0 units.",
+      "category": "inventory",
+      "actor": "ExceptionOS AI Agent"
+    },
+    {
+      "id": "evt-6",
+      "incidentId": "INC-10482",
+      "timestamp": "10:45",
+      "title": "Part alternative located",
+      "description": "4 compatible units found at Warehouse B (14 km away). Estimated transfer time: 45 minutes.",
+      "category": "inventory",
+      "actor": "ExceptionOS AI Agent"
+    },
+    {
+      "id": "evt-7",
+      "incidentId": "INC-10482",
+      "timestamp": "10:46",
+      "title": "Authorization requested",
+      "description": "Consequential action requiring supervisor approval: Dispatch Bearing B-204 from Warehouse B ($420).",
+      "category": "authorization",
+      "actor": "ExceptionOS AI Agent"
+    }
+  ],
+  "authorizations": [
+    {
+      "id": "auth-10482",
+      "incidentId": "INC-10482",
+      "incidentTitle": "Machine 7 overheating and abnormal vibration",
+      "proposedAction": "Dispatch Bearing B-204 from Warehouse B to Plant A",
+      "reason": "Plant A local inventory is exhausted. Machine 7 is at critical seizure risk (94°C, 0.38g).",
+      "affectedAsset": "Machine 7 (M-007)",
+      "fromLocation": "Warehouse B",
+      "toLocation": "Plant A",
+      "distanceKm": 14,
+      "estimatedCost": 420,
+      "requestedBy": "ExceptionOS Autonomous Dispatcher",
+      "requestedAt": "10:46",
+      "status": "PENDING"
+    },
+    {
+      "id": "auth-10461",
+      "incidentId": "INC-10461",
+      "incidentTitle": "High-pressure hydraulic line overhaul",
+      "proposedAction": "Emergency specialist hydraulic contractor dispatch",
+      "reason": "Specialized hydraulic valve recalibration exceeding in-house tooling specifications.",
+      "affectedAsset": "Hydraulic Press 2 (P-002)",
+      "fromLocation": "FluidTech Services",
+      "toLocation": "Plant B",
+      "distanceKm": 28,
+      "estimatedCost": 1200,
+      "requestedBy": "Operations Dispatch",
+      "requestedAt": "09:32",
+      "status": "APPROVED",
+      "decidedBy": "Sarah Williams (Supervisor)",
+      "decidedAt": "09:38"
+    }
+  ],
+  "workOrders": [
+    {
+      "id": "WO-2031",
+      "organizationId": "org-acme",
+      "incidentId": "INC-10482",
+      "assetId": "ast-m007",
+      "assetCode": "M-007",
+      "assetName": "Machine 7",
+      "siteName": "Plant A",
+      "title": "Replace drive bearing and calibrate spindle runout",
+      "description": "Install replacement ceramic hybrid bearing B-204 upon arrival from Warehouse B. Check vibration levels.",
+      "assignedToUserId": "usr-james",
+      "assignedToName": "Alex Rivera",
+      "status": "In Progress",
+      "priority": "Critical",
+      "requiredParts": [
+        {
+          "partCode": "B-204",
+          "name": "Bearing B-204",
+          "quantity": 1,
+          "status": "Dispatched"
+        }
+      ],
+      "createdAt": "10:46",
+      "startedAt": "10:50"
+    },
+    {
+      "id": "WO-2030",
+      "organizationId": "org-acme",
+      "incidentId": "INC-10479",
+      "assetId": "ast-c003",
+      "assetCode": "C-003",
+      "assetName": "Conveyor 3",
+      "siteName": "Plant A",
+      "title": "Inspect conveyor belt tension and replace V-Belt",
+      "description": "Adjust drive pulley and fit replacement belt V-118.",
+      "assignedToUserId": "usr-james",
+      "assignedToName": "Sam T.",
+      "status": "Assigned",
+      "priority": "High",
+      "requiredParts": [
+        {
+          "partCode": "V-118",
+          "name": "V-Belt V-118",
+          "quantity": 1,
+          "status": "Delivered"
+        }
+      ],
+      "createdAt": "09:20"
+    },
+    {
+      "id": "WO-2028",
+      "organizationId": "org-acme",
+      "incidentId": "INC-10471",
+      "assetId": "ast-p002",
+      "assetCode": "P-002",
+      "assetName": "Hydraulic Press 2",
+      "siteName": "Plant B",
+      "title": "Check hydraulic pressure and replace filter HF-233",
+      "description": "Flush cartridge manifold and insert new element.",
+      "assignedToUserId": "usr-taylor",
+      "assignedToName": "Taylor K.",
+      "status": "Open",
+      "priority": "Medium",
+      "requiredParts": [
+        {
+          "partCode": "HF-233",
+          "name": "Hydraulic Filter HF-233",
+          "quantity": 1,
+          "status": "Pending"
+        }
+      ],
+      "createdAt": "08:35"
+    },
+    {
+      "id": "WO-2027",
+      "organizationId": "org-acme",
+      "incidentId": "INC-10465",
+      "assetId": "ast-cp001",
+      "assetCode": "CP-001",
+      "assetName": "Compressor 1",
+      "siteName": "Plant B",
+      "title": "Replace air intake and secondary relief filter",
+      "description": "Routine maintenance and seal check on rotary compressor.",
+      "assignedToUserId": "usr-james",
+      "assignedToName": "Jordan L.",
+      "status": "Completed",
+      "priority": "Low",
+      "requiredParts": [],
+      "createdAt": "06:40",
+      "completedAt": "07:55"
+    },
+    {
+      "id": "WO-2026",
+      "organizationId": "org-acme",
+      "incidentId": "INC-10462",
+      "assetId": "ast-mo004",
+      "assetCode": "MO-004",
+      "assetName": "Motor 4",
+      "siteName": "Plant A",
+      "title": "Electrical inspection & terminal torque check",
+      "description": "Thermal inspection on motor junction box and leads.",
+      "assignedToUserId": "usr-alex",
+      "assignedToName": "Riley S.",
+      "status": "Completed",
+      "priority": "Low",
+      "requiredParts": [],
+      "createdAt": "06:10",
+      "completedAt": "07:10"
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "aud-1",
+      "timestamp": "2026-09-30T10:29:22.500Z",
+      "timeFormatted": "10:46",
+      "title": "Authorization requested",
+      "description": "ExceptionOS AI created authorization request auth-10482 for dispatch of Bearing B-204 ($420).",
+      "category": "Authorizations",
+      "actor": "ExceptionOS Autonomous Engine",
+      "targetId": "auth-10482"
+    },
+    {
+      "id": "aud-2",
+      "timestamp": "2026-09-30T10:28:22.503Z",
+      "timeFormatted": "10:45",
+      "title": "Part alternative found",
+      "description": "Bearing B-204 located at Warehouse B (4 available). Cross-warehouse dispatch plan formulated.",
+      "category": "Incidents",
+      "actor": "Inventory Agent",
+      "targetId": "INC-10482"
+    },
+    {
+      "id": "aud-3",
+      "timestamp": "2026-09-30T10:27:22.503Z",
+      "timeFormatted": "10:44",
+      "title": "Inventory checked",
+      "description": "Queried Plant A store for Bearing B-204. Balance: 0 units.",
+      "category": "Incidents",
+      "actor": "Inventory Agent",
+      "targetId": "INC-10482"
+    },
+    {
+      "id": "aud-4",
+      "timestamp": "2026-09-30T10:26:22.503Z",
+      "timeFormatted": "10:43",
+      "title": "Maintenance history queried",
+      "description": "Machine 7 service records analyzed. 2,100 operating hours since last bearing replacement.",
+      "category": "Incidents",
+      "actor": "Diagnostic Agent",
+      "targetId": "ast-m007"
+    },
+    {
+      "id": "aud-5",
+      "timestamp": "2026-09-30T10:25:22.503Z",
+      "timeFormatted": "10:43",
+      "title": "Telemetry checked",
+      "description": "Temperature 94°C (Limit: 75°C), Vibration 0.38g (Limit: 0.15g). Severity elevated to Critical.",
+      "category": "Incidents",
+      "actor": "Diagnostic Agent",
+      "targetId": "INC-10482"
+    },
+    {
+      "id": "aud-6",
+      "timestamp": "2026-09-30T10:24:22.503Z",
+      "timeFormatted": "10:42",
+      "title": "Incident created",
+      "description": "Field voice report by James Okoro processed. Asset M-007 identified automatically.",
+      "category": "Incidents",
+      "actor": "James Okoro",
+      "targetId": "INC-10482"
+    }
+  ]
+}

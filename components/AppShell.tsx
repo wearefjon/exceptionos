@@ -19,12 +19,14 @@ import {
   User,
   Menu,
   X,
+  ExternalLink,
 } from 'lucide-react';
 
 interface AppShellProps {
   currentTab: string;
   onNavigate: (tab: string) => void;
   onOpenVoice: () => void;
+  onViewLanding?: () => void;
   pendingAuthCount: number;
   criticalIncidentCount: number;
   children: React.ReactNode;
@@ -34,6 +36,7 @@ export default function AppShell({
   currentTab,
   onNavigate,
   onOpenVoice,
+  onViewLanding,
   pendingAuthCount,
   criticalIncidentCount,
   children,
@@ -170,7 +173,19 @@ export default function AppShell({
                     </span>
                   </button>
                 ))}
-                <div className="border-t border-slate-100 mt-1 pt-1">
+                <div className="border-t border-slate-100 mt-1 pt-1 space-y-0.5">
+                  {onViewLanding && (
+                    <button
+                      onClick={() => {
+                        onViewLanding();
+                        setShowUserMenu(false);
+                      }}
+                      className="w-full text-left px-3 py-1.5 hover:bg-slate-50 text-slate-700 font-medium flex items-center space-x-1.5"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+                      <span>Public Landing Page</span>
+                    </button>
+                  )}
                   <button
                     onClick={() => {
                       logout();
@@ -218,6 +233,18 @@ export default function AppShell({
           </div>
 
           <div className="flex items-center space-x-3">
+            {/* View Landing Page link */}
+            {onViewLanding && (
+              <button
+                onClick={onViewLanding}
+                className="hidden md:inline-flex items-center space-x-1 px-2.5 py-1 text-xs font-semibold text-slate-600 hover:text-slate-900 border border-slate-200 hover:border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
+                title="View Public Marketing Landing Page"
+              >
+                <span>Landing Page</span>
+                <ExternalLink className="w-3 h-3 text-slate-400" />
+              </button>
+            )}
+
             {/* Plant Site indicator */}
             <div className="hidden sm:flex items-center space-x-1.5 text-xs text-slate-600 px-2.5 py-1 rounded bg-slate-100 border border-slate-200 font-medium">
               <span className="w-2 h-2 rounded-full bg-emerald-500" />
