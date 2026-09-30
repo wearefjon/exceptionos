@@ -604,7 +604,7 @@ const INITIAL_DATA: DatabaseSchema = {
       title: 'Replace drive bearing and calibrate spindle runout',
       description: 'Install replacement ceramic hybrid bearing B-204 upon arrival from Warehouse B. Check vibration levels.',
       assignedToUserId: 'usr-james',
-      assignedToName: 'Alex Rivera',
+      assignedToName: 'James Okoro',
       status: 'In Progress',
       priority: 'Critical',
       requiredParts: [
@@ -767,34 +767,53 @@ const INITIAL_DATA: DatabaseSchema = {
   ],
 };
 
+let memoryCache: DatabaseSchema | null = null;
+
 function ensureDataDirectory() {
-  const dir = path.dirname(DB_FILE);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+  try {
+    const dir = path.dirname(DB_FILE);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+  } catch {
+    // Ignore error in read-only filesystem environments
   }
 }
 
 export function readDatabase(): DatabaseSchema {
-  ensureDataDirectory();
-  if (!fs.existsSync(DB_FILE)) {
-    fs.writeFileSync(DB_FILE, JSON.stringify(INITIAL_DATA, null, 2), 'utf-8');
-    return INITIAL_DATA;
+  if (memoryCache) {
+    return memoryCache;
   }
+  ensureDataDirectory();
   try {
+    if (!fs.existsSync(DB_FILE)) {
+      try {
+        fs.writeFileSync(DB_FILE, JSON.stringify(INITIAL_DATA, null, 2), 'utf-8');
+      } catch {
+        memoryCache = JSON.parse(JSON.stringify(INITIAL_DATA));
+        return memoryCache!;
+      }
+      return INITIAL_DATA;
+    }
     const raw = fs.readFileSync(DB_FILE, 'utf-8');
     return JSON.parse(raw) as DatabaseSchema;
   } catch (err) {
     console.error('Error reading database, restoring seed data:', err);
-    fs.writeFileSync(DB_FILE, JSON.stringify(INITIAL_DATA, null, 2), 'utf-8');
-    return INITIAL_DATA;
+    memoryCache = JSON.parse(JSON.stringify(INITIAL_DATA));
+    return memoryCache!;
   }
 }
 
 export function writeDatabase(data: DatabaseSchema): void {
-  ensureDataDirectory();
-  const tempFile = `${DB_FILE}.tmp.${Date.now()}`;
-  fs.writeFileSync(tempFile, JSON.stringify(data, null, 2), 'utf-8');
-  fs.renameSync(tempFile, DB_FILE);
+  memoryCache = data;
+  try {
+    ensureDataDirectory();
+    const tempFile = `${DB_FILE}.tmp.${Date.now()}`;
+    fs.writeFileSync(tempFile, JSON.stringify(data, null, 2), 'utf-8');
+    fs.renameSync(tempFile, DB_FILE);
+  } catch (err) {
+    console.warn('Could not write to disk, using in-memory state:', err);
+  }
 }
 
 // -------------------------------------------------------------
@@ -1398,4 +1417,10 @@ export const db = {
 
   // AUTHORIZATIONS LIST
   getAuthorizations: () => readDatabase().authorizations,
+
+  // RESET TO INITIAL SEED DATA
+  resetToSeed: () => {
+    writeDatabase(JSON.parse(JSON.stringify(INITIAL_DATA)));
+    return true;
+  },
 };

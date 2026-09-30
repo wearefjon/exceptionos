@@ -1,83 +1,194 @@
 # ExceptionOS
 
-**Voice-native exception management for real-world operations.**
+> **Voice-native operational exception management for physical-world operations.**
 
-ExceptionOS turns a messy physical-world incident into a coordinated, verified outcome:
+ExceptionOS coordinates the entire incident lifecycle when real-world equipment fails:
+**Detect → Investigate → Plan → Authorize → Act → Verify → Close the Loop.**
 
-**Detect → Investigate → Orchestrate → Recover → Authorize → Act → Verify → Close**
+Built for the **AssemblyAI Voice Agent Hackathon**.
 
-## Hackathon demo
+---
 
-The prototype models an industrial incident: a technician reports that Machine 7 is overheating and vibrating. ExceptionOS investigates telemetry, maintenance history and SOP guidance, discovers that the required bearing is unavailable, finds a compatible part at another warehouse, requests explicit authorization, dispatches it, and independently verifies the machine returned to normal.
+## 1. What is ExceptionOS?
 
-The key product idea is **exception management**, not a generic chatbot: consequential actions require authorization, and resolution is not declared until the physical outcome is independently verified.
+When something goes wrong in an industrial facility, the worker closest to the problem should not have to log into three enterprise systems, check inventory databases, search PDF manuals, make phone calls, or create manual work orders.
 
-## Run locally
+**They should simply say what happened.**
+
+ExceptionOS converts that spoken report into a structured incident, investigates live telemetry and maintenance records, checks cross-facility inventory, recommends a recovery plan, halts for human authorization before executing consequential actions, dispatches technicians and parts, and **independently verifies the physical outcome before closing the incident.**
+
+---
+
+## 2. Platform Architecture
+
+```text
+                           TECHNICIAN / OPERATOR
+                                     │
+                                     ▼ (24 kHz PCM16 Audio)
+                         ASSEMBLYAI VOICE AGENT
+                     (wss://agents.assemblyai.com/v1/ws)
+                                     │
+                             JSON Tool Calls
+                                     │
+                                     ▼
+                    EXCEPTIONOS ORCHESTRATION LAYER
+               ┌─────────────────────┼─────────────────────┐
+               ▼                     ▼                     ▼
+        INCIDENT AGENT         DIAGNOSTIC AGENT     INVENTORY AGENT
+      (Create Exception)    (Telemetry & History)  (Multi-warehouse)
+               │                     │                     │
+               └─────────────────────┼─────────────────────┘
+                                     │
+                                     ▼
+                           RECOVERY ACTION PLAN
+                                     │
+                                     ▼
+                        MANDATORY HUMAN AUTHORIZATION
+                                     │
+                    ┌────────────────┴────────────────┐
+                    │ Approved                        │ Rejected
+                    ▼                                 ▼
+            EXECUTE DISPATCH                  ESCALATE INCIDENT
+          (Work Order + Courier)
+                    │
+                    ▼
+          INDEPENDENT SENSOR VERIFICATION
+          (Temp <= 75°C, Vib <= 0.15g)
+                    │
+                    ▼
+          RESOLVED STATE + COMPLIANCE AUDIT TRAIL
+```
+
+---
+
+## 3. AssemblyAI Voice Agent Integration
+
+ExceptionOS connects directly to the new **AssemblyAI Voice Agent API** over WebSocket:
+
+1. **Short-lived Token Generation (`GET /api/voice-token`):**
+   * Server requests a 300-second ephemeral token from `https://agents.assemblyai.com/v1/token?expires_in_seconds=300` using `Authorization: Bearer ${ASSEMBLYAI_API_KEY}`.
+   * The master `ASSEMBLYAI_API_KEY` remains strictly server-side and is never sent to the browser.
+2. **WebSocket Connection (`wss://agents.assemblyai.com/v1/ws?token=TOKEN`):**
+   * Browser connects to AssemblyAI's managed real-time agent.
+   * Sends `session.update` with an industrial operational system prompt and 10 registered operational tool schemas.
+3. **Audio Streaming:**
+   * Browser captures microphone audio via Web Audio API.
+   * Converted to 24 kHz mono 16-bit signed PCM (base64-encoded `input.audio` JSON frames).
+4. **Agent Speech & Turn Detection:**
+   * Receives `reply.audio` streaming chunks, queued and played through Web Audio `AudioContext`.
+   * Real-time transcripts emitted as `transcript.user` and `transcript.agent`.
+5. **Tool Calling (`tool.call` & `tool.result`):**
+   * When the agent needs data or actions, AssemblyAI emits a `tool.call` event.
+   * ExceptionOS executes the tool against the local domain database and returns `tool.result`.
+
+---
+
+## 4. Registered Operational Tools
+
+| Tool Name | Purpose | Consequential? |
+|---|---|---|
+| `get_asset` | Look up asset details, status, and plant site location | No |
+| `get_telemetry` | Query real-time sensors (temperature, vibration, pressure) | No |
+| `get_maintenance_history` | Retrieve previous repairs and operating hours since last service | No |
+| `search_sop` | Retrieve standard operating procedures and diagnostic guidelines | No |
+| `check_inventory` | Check replacement component availability at local plant warehouse | No |
+| `find_nearby_part` | Query remote distribution centers for compatible replacement parts | No |
+| `create_work_order` | Generate and assign maintenance work order to certified technician | No |
+| `authorize_dispatch` | Record explicit supervisor authorization to approve expenditures | No |
+| `dispatch_part` | Physical dispatch from remote warehouse ($420 cost) | **YES (Blocked until authorized)** |
+| `verify_resolution` | Query hardware sensors to verify temperature and vibration limits | No |
+
+---
+
+## 5. Local Setup
+
+### Prerequisites
+* Node.js 18.17+ or Node.js 20+
+* npm or pnpm
+
+### Installation
 
 ```bash
+# 1. Clone repository
+git clone https://github.com/wearefjon/exceptionos.git
+cd exceptionos
+
+# 2. Install dependencies
 npm install
+
+# 3. Configure environment variables
 cp .env.example .env.local
-# add your AssemblyAI API key to .env.local
+```
+
+Edit `.env.local` and add your AssemblyAI API Key:
+```env
+ASSEMBLYAI_API_KEY=your_assemblyai_api_key_here
+```
+
+### Run Locally
+
+```bash
 npm run dev
 ```
 
-Open `http://localhost:3000`.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-For a production deployment, set `ASSEMBLYAI_API_KEY` as a server-side environment variable. Never expose the key to the browser or commit `.env.local`.
+---
 
-## Live voice flow
+## 6. Environment Variables
 
-The UI uses AssemblyAI's Voice Agent API over WebSocket:
+| Variable | Required | Description |
+|---|---|---|
+| `ASSEMBLYAI_API_KEY` | **Yes** (for live voice) | AssemblyAI API Key used to mint short-lived Voice Agent tokens |
+| `PORT` | No | Server port (default: `3000`) |
+| `NODE_ENV` | No | Environment (`development` or `production`) |
 
-1. The browser requests a short-lived token from `/api/voice-token`.
-2. The browser opens the AssemblyAI agent WebSocket with that temporary token.
-3. Microphone audio is captured as mono PCM16 at 24 kHz through an AudioWorklet.
-4. The agent performs turn detection, speech recognition, voice output and JSON-schema tool calling.
-5. ExceptionOS executes deterministic operational tools in the browser for the hackathon demo.
-6. Tool results are returned to the agent, which continues the workflow.
+---
 
-For production, the mock tools should move behind authenticated server-side APIs connected to CMMS/EAM, telemetry, inventory, dispatch and ERP systems.
+## 7. Deployment Instructions
 
-## Demo flow
+### Vercel / Render / Node Server
 
-### Voice path
+1. Push your repository to GitHub.
+2. In your deployment dashboard (e.g. Vercel):
+   * Framework Preset: **Next.js**
+   * Build Command: `npm run build`
+   * Output Directory: `.next`
+3. Add Environment Variable:
+   * `ASSEMBLYAI_API_KEY` = your AssemblyAI API key
+4. Deploy!
 
-Say:
+---
 
-> “Machine 7 is overheating and vibrating more than usual.”
+## 8. Primary Demo Sequence (Under 3 Minutes)
 
-Then let the agent investigate. When it reports that the bearing is unavailable at Plant A and asks for authorization, say an explicit confirmation such as:
+1. **Load Landing Page:** Open `http://localhost:3000`. Click **"Launch Operations Console"**.
+2. **Open Voice Console:** Click **"Talk to ExceptionOS"** in the sidebar.
+3. **Start Voice Session:** Click **"Start Voice Session"** (connects to AssemblyAI via WebSocket).
+4. **Report the Incident:**
+   * Speak: *"Machine 7 is overheating and vibrating more than usual."*
+5. **Watch Autonomous Investigation:**
+   * Agent identifies Machine 7 (`M-007`).
+   * Agent queries telemetry (finds 94°C and 0.38g vibration — Critical!).
+   * Agent checks SOP `SOP-M007-BRG` (recommends bearing replacement).
+   * Agent checks Plant A inventory (0 units of Bearing B-204).
+   * Agent finds 4 compatible units at Warehouse B (14 km away, $420).
+   * Agent explains the recovery plan and requests authorization.
+6. **Authorize the Action:**
+   * Speak: *"Yes, authorize the dispatch."* (or click the Authorize button in the drawer).
+   * Agent calls `authorize_dispatch`, `dispatch_part`, and `create_work_order`.
+   * Work order `WO-2031` is issued to technician **James Okoro**.
+7. **Complete Repair & Verify:**
+   * In the incident detail screen, click **"Run Telemetry Verification"** (or say *"Verify telemetry resolution"*).
+   * ExceptionOS queries sensors: Temperature drops to **71°C** (threshold <= 75°C) and vibration drops to **0.12g** (threshold <= 0.15g).
+   * Incident transitions to **`RESOLVED`** and Machine 7 returns to **`Online`**.
+8. **Inspect Audit Trail:**
+   * Navigate to the **Activity** tab to inspect the immutable chronological record.
 
-> “Yes, approve the dispatch.”
+---
 
-After dispatch, say that the repair is complete. The agent calls the verification tool and closes the incident only after telemetry returns to normal.
+## 9. Known Demo Limitations
 
-### UI fallback
-
-1. Start incident.
-2. Show investigation timeline.
-3. Highlight the deliberately injected inventory exception.
-4. Approve dispatch.
-5. Verify resolution.
-6. Show the resolved state and normalized telemetry.
-
-## Architecture
-
-```text
-Technician
-    ↓ voice
-AssemblyAI Voice Agent API
-    ↓ tool calls
-ExceptionOS orchestration state
-    ├── telemetry
-    ├── maintenance history
-    ├── SOP
-    ├── inventory
-    └── dispatch
-    ↓
-physical action
-    ↓
-independent verification
-    ↓
-closed incident + audit trail
-```
+* **Deterministic Persistence:** For the hackathon demo, state is stored in `data/exceptionos-db.json` with an automatic in-memory fallback for read-only serverless platforms. In production, this would be backed by PostgreSQL / Supabase.
+* **Simulated Telemetry:** Sensor readings simulate industrial SCADA/IoT telemetry streams rather than direct hardware connections.
+* **Deterministic Demo Fallback:** If the microphone is muted or browser permissions are unavailable during a live presentation, the UI includes one-click preset prompt chips and a **"Load Machine 7"** button in the top bar to guarantee a flawless walkthrough.

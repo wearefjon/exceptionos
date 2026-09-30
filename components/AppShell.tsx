@@ -20,6 +20,7 @@ import {
   Menu,
   X,
   ExternalLink,
+  RotateCcw,
 } from 'lucide-react';
 
 interface AppShellProps {
@@ -27,6 +28,7 @@ interface AppShellProps {
   onNavigate: (tab: string) => void;
   onOpenVoice: () => void;
   onViewLanding?: () => void;
+  onResetDemo?: () => void;
   pendingAuthCount: number;
   criticalIncidentCount: number;
   children: React.ReactNode;
@@ -37,6 +39,7 @@ export default function AppShell({
   onNavigate,
   onOpenVoice,
   onViewLanding,
+  onResetDemo,
   pendingAuthCount,
   criticalIncidentCount,
   children,
@@ -242,6 +245,23 @@ export default function AppShell({
               >
                 <span>Landing Page</span>
                 <ExternalLink className="w-3 h-3 text-slate-400" />
+              </button>
+            )}
+
+            {/* Demo Environment Badge */}
+            <span className="hidden xl:inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-amber-50 text-amber-800 border border-amber-200">
+              Demo Environment
+            </span>
+
+            {/* Deterministic Demo Fallback: Load Machine 7 */}
+            {onResetDemo && (
+              <button
+                onClick={onResetDemo}
+                className="hidden lg:inline-flex items-center space-x-1.5 px-2.5 py-1 text-xs font-semibold text-slate-700 hover:text-slate-900 border border-slate-200 hover:border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
+                title="Load Seeded Machine 7 Incident State"
+              >
+                <RotateCcw className="w-3 h-3 text-slate-400" />
+                <span>Load Machine 7</span>
               </button>
             )}
 

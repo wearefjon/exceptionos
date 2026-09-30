@@ -2,28 +2,52 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   const apiKey = process.env.ASSEMBLYAI_API_KEY;
-  if (!apiKey) {
-    return NextResponse.json({ available: false, message: 'Native Web Speech fallback active' });
+
+  if (!apiKey || apiKey.trim() === '') {
+    return NextResponse.json({
+      available: false,
+      message: 'ASSEMBLYAI_API_KEY not configured. Browser speech fallback active.',
+    });
   }
 
   try {
-    const response = await fetch('https://api.assemblyai.com/v2/realtime/token', {
-      method: 'POST',
+    const res = await fetch('https://agents.assemblyai.com/v1/token?expires_in_seconds=300', {
+      method: 'GET',
       headers: {
-        Authorization: apiKey,
+        Authorization: `Bearer ${apiKey.trim()}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ expires_in: 3600 }),
       cache: 'no-store',
     });
 
-    if (!response.ok) {
-      return NextResponse.json({ available: false, error: 'AssemblyAI token request failed' });
+    if (!res.ok) {
+      const errText = await res.text();
+      console.warn(`AssemblyAI token endpoint returned status ${res.status}: ${errText}`);
+      return NextResponse.json({
+        available: false,
+        error: `AssemblyAI token request failed with status ${res.status}`,
+        details: errText,
+      });
     }
 
-    const data = await response.json();
-    return NextResponse.json({ available: true, token: data.token });
-  } catch {
-    return NextResponse.json({ available: false, error: 'Network error contacting AssemblyAI' });
+    const data = await res.json().catch(async () => {
+      const text = await res.text();
+      return { token: text };
+    });
+
+    const token = data.token || data;
+
+    return NextResponse.json({
+      available: true,
+      token,
+      expires_in_seconds: 300,
+      wsUrl: `wss://agents.assemblyai.com/v1/ws?token=${token}`,
+    });
+  } catch (error: any) {
+    console.error('Error requesting AssemblyAI Voice Agent token:', error);
+    return NextResponse.json({
+      available: false,
+      error: error.message || 'Network error requesting AssemblyAI token',
+    });
   }
 }

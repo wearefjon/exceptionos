@@ -100,6 +100,18 @@ function ExceptionOSApp() {
     setViewMode('app');
   };
 
+  // Reset to initial Machine 7 scenario
+  const handleResetDemo = async () => {
+    try {
+      await fetch('/api/demo/reset', { method: 'POST' });
+      await refreshData();
+      setSelectedIncidentId('INC-10482');
+      setCurrentTab('incidents');
+    } catch (err) {
+      console.error('Failed to reset demo:', err);
+    }
+  };
+
   // If user selected Landing Page mode
   if (viewMode === 'landing') {
     return (
@@ -147,6 +159,7 @@ function ExceptionOSApp() {
       }}
       onOpenVoice={() => setIsVoiceOpen(true)}
       onViewLanding={() => setViewMode('landing')}
+      onResetDemo={handleResetDemo}
       pendingAuthCount={pendingAuthCount}
       criticalIncidentCount={criticalIncidentCount}
     >
